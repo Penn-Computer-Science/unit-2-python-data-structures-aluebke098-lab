@@ -11,11 +11,10 @@
 # display gradebook summary
     # show each student, grades, and average; display letter grades based on averages
 
-grade_book = {"Billy":[90, 89, 95], "Bob":[69, 99, 86], "Joe":[100, 42, 98,]}
+grade_book = {"Billy":[100, 42, 98], "Bob":[69, 99, 86], "Joe":[90, 89, 95]}
 # grade_book_averages = {"Billy":(,), "Bob":(,), "Joe":(,)}
 student_standings = ["Billy", "Bob", "Joe"]
 grade_book_averages = [(), (), ()]
-# //////////////////////////////////////////////////////////////////////////////////////need to fix, split into two lists to sort maybe?
 LETTER_GRADES = ("A", "B", "C", "D", "F")
 GRADE_MIN = 0
 GRADE_MAX = 100
@@ -30,16 +29,15 @@ def action_choice():
             valid_value = True
             print("Goodbye")
             print("")
+            break
         elif action == "edit":
-            valid_value = True
+            # valid_value = True
             edit_gradebook()
         elif action == "view":
-            valid_value = True
-            # display_summary()
-            continue
+            # valid_value = True
+            display_summary()
         else:
-            print("That is not a valid choice. Please spell your choice correctly.")
-            print("")
+            print("That is not a valid choice. Please spell your choice correctly.\n")
 
 # calculate average grades + assign letter grade
 def calculate(student):
@@ -59,28 +57,64 @@ def calculate(student):
         grade_letter = LETTER_GRADES[3]
     else:
         grade_letter = LETTER_GRADES[4]
-    # grade_book_averages[student] = (grade_average, grade_letter)////////////////////////////////////////////////////////////////////////////////
+    # grade_book_averages[student] = (grade_average, grade_letter)
+    index = student_standings.index(student)
+    grade_book_averages[index] = (grade_average, grade_letter)
 
-# loop through and compare averages, sort?
+# loop through and compare averages, sort
 def sort_grades():
+    global grade_book_averages, student_standings
     for student in grade_book.keys():
         calculate(student)
-    
+    # print(grade_book_averages) # temp //////
+    for i in range(len(grade_book_averages)-1):
+        if (grade_book_averages[i][0]) < (grade_book_averages[i+1][0]):
+            var_1 = grade_book_averages[i]
+            # print(var_1)
+            name_1 = student_standings[i]
+            var_2 = grade_book_averages[i+1]
+            name_2 = student_standings[i+1]
+            grade_book_averages[i] = var_2
+            student_standings[i] = name_2
+            grade_book_averages[i+1] = var_1
+            student_standings[i+1] = name_1
+            # print(grade_book_averages)
+            if i > 0:
+                for g in range(i, 0, -1):
+                    if (grade_book_averages[g-1][0]) < (grade_book_averages[g][0]):
+                        var_3 = grade_book_averages[g-1]
+                        name_3 = student_standings[g-1]
+                        var_4 = grade_book_averages[g]
+                        name_4 = student_standings[g]
+                        grade_book_averages[g-1] = var_4
+                        student_standings[g-1] = name_4
+                        grade_book_averages[g] = var_3
+                        student_standings[g] = name_3
+                        # print(grade_book_averages)
+                    else:
+                        break
 
 # show the gradebook summary
-# def display_summary():
+def display_summary():
+    sort_grades()
+    print(f"The top student is {student_standings[0]}.")
+    for i in range(len(student_standings)):
+        print(f"Name: {student_standings[i]}\nGrade: {grade_book_averages[i][1]}, {grade_book_averages[i][0]}\n")
+    cont = input("[press enter to continue]\n")
 
 # add/remove students or grades
 def edit_gradebook():
-    global grade_book, grade_book_averages
-    valid_value = False
-    while not valid_value:
+    global grade_book, grade_book_averages, student_standings
+    valid_value_a = False
+    while not valid_value_a:
         action = input("What would you like to do?\n   Add Student\n   Remove Student\n   Add Grade\n   Remove Grade\n   Return\n").strip().lower()
         print("")
         if action == "add student":
             new_student = input("What is the new student's name?\n").strip()
             grade_book[new_student] = []
-            # grade_book_averages[new_student] = (,)////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            student_standings.append(new_student)
+            grade_book_averages.append(())
+            # grade_book_averages[new_student] = () 
             print(f"{new_student} has been added to the gradebook.")
             print("")
         elif action == "remove student":
@@ -126,12 +160,21 @@ def edit_gradebook():
                 print(f"{oops_student} is not in the gradebook. Cancelling action.")
             print("")
         elif action == "return":
-            valid_value = True
-            print("")
-            action_choice()
+            valid_value_a = True
+            # action_choice()
+            break
         else:
             print("That is not a valid choice. Please spell your choice correctly and use exactly one space in between the words.")
             print("")
 
 # code that runs down below
 action_choice()
+
+# sort_grades() # temp ////////////
+
+# temp for testing
+# temp = [["a",1],["b",2]]
+
+# print(temp)
+# print(temp[0])
+# print(temp[0][0])
