@@ -16,3 +16,4 @@ df = pd.DataFrame(
 )
 
 print(df)
+print(df.describe())
