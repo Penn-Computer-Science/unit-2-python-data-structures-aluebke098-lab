@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import random
 
+# -=-=-=-=-=-=- PANDAS -=-=-=-=-=-=
 # load dataframe
 df = pd.read_csv("pennData.csv")
 pennData = pd.DataFrame(df)
@@ -42,3 +43,16 @@ print(pennData[pennData["GPA"]>3.5])
 print("-_"*20)
 print("First Student Data") #pulls all data for a specific index (iloc = index location)
 print(pennData.iloc[0])
+
+# -=-=-=-=-=-= MATPLOTLIB -=-=-=-=-=-=
+print("-_"*20)
+print(pennData.groupby("Year")["GPA"].mean())  #still pandas #groups data for a graph by (first axis)[second axis]
+
+print("-_"*20)
+pennData.groupby("Year")["GPA"].mean().plot(kind='bar', color='red', edgecolor='black') 
+    #takes the grouped values and turns it into a graph by using .plot(kind=type of graph, color=color of graph, edgecolor = outlines the bar in a color)
+
+plt.title("this is the title of the graph") #adding labels
+plt.xlabel("label of x axis")
+plt.ylabel("label of y axis")
+plt.show() #shows the graph
