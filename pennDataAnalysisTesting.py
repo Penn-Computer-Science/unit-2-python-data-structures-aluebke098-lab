@@ -56,3 +56,6 @@ plt.title("this is the title of the graph") #adding labels
 plt.xlabel("label of x axis")
 plt.ylabel("label of y axis")
 plt.show() #shows the graph
+
+pennData["GPA"].plot(kind='box')
+plt.show()
